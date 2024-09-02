@@ -21,6 +21,9 @@ class SerialNode(Node):
             self.get_logger().error(f"Failed to open serial port: {e}")
             self.serial_port = None
 
+        # 타이머 설정 (0.1초마다 시리얼 포트에서 데이터 읽기 시도)
+        self.timer = self.create_timer(0.1, self.read_serial_data)
+
     def listener_callback(self, msg):
         self.get_logger().info(f'Received action: {msg.data}')
         if self.serial_port and self.serial_port.is_open:
@@ -29,6 +32,15 @@ class SerialNode(Node):
                 self.get_logger().info(f'Sent to Arduino: {msg.data}')
             except serial.SerialTimeoutException as e:
                 self.get_logger().error(f"Failed to send data to Arduino: {e}")
+
+    def read_serial_data(self):
+        if self.serial_port and self.serial_port.is_open:
+            try:
+                if self.serial_port.in_waiting > 0:  # 읽을 데이터가 있는지 확인
+                    arduino_data = self.serial_port.readline().decode('utf-8').strip()  # 아두이노로부터 데이터 읽기
+                    self.get_logger().info(f'Received from Arduino: {arduino_data}')
+            except serial.SerialException as e:
+                self.get_logger().error(f"Failed to read from Arduino: {e}")
 
 def main(args=None):
     rclpy.init(args=args)
