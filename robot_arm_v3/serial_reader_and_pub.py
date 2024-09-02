@@ -7,7 +7,7 @@ class SerialReaderNode(Node):
     def __init__(self):
         super().__init__('serial_reader')
         self.publisher_ = self.create_publisher(String, 'serial_data', 10)
-        self.serial_port = serial.Serial('/dev/ttyACM3', 115200)  # 시리얼 포트 설정
+        self.serial_port = serial.Serial('/dev/ttyUSB0', 115200)  # 시리얼 포트 설정
         self.timer = self.create_timer(0.1, self.read_serial_data)  # 0.1초마다 데이터 읽기
 
     def read_serial_data(self):

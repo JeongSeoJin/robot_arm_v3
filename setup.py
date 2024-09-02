@@ -23,6 +23,8 @@ setup(
             'serial_reader = robot_arm_v3.serial_reader_and_pub:main',
             'serial_sub = robot_arm_v3.serial_data_subscriber:main',
             'node = robot_arm_v3.my_first_node:main',
+            'vision_node = robot_arm_v3.vision_node:main',
+            'serial_node = robot_arm_v3.serial_node:main',
         ],
     },
 )
