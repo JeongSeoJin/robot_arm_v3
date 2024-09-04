@@ -6,10 +6,10 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-actions = ['come', 'away', 'spin']
+actions = ['forward', 'backward', 'up', 'down', 'right', 'left', 'stop']
 seq_length = 30
 
-model = load_model('/home/seojin/ros2_ws/src/robot_arm_v3/robot_arm_v3/models/model2_1.0.h5')
+model = load_model('/home/seojin/ros2_ws/src/robot_arm_v3/robot_arm_v3/models/model.h5')
 
 # MediaPipe hands model
 mp_hands = mp.solutions.hands
@@ -100,12 +100,21 @@ while cap.isOpened():
                 this_action = action
 
                 if last_action != this_action:
-                    if this_action == 'come':
+                    if this_action == 'forward':
                         action_publisher.publish_action("forward")
-                    elif this_action == 'away':
+                    elif this_action == 'backward':
                         action_publisher.publish_action("backward")
-                    elif this_action == 'spin':
-                        action_publisher.publish_action("rotate")
+                    elif this_action == 'up':
+                        action_publisher.publish_action("up")
+                    elif this_action == 'down':
+                        action_publisher.publish_action("down")
+                    elif this_action == 'right':
+                        action_publisher.publish_action("right")
+                    elif this_action == 'left':
+                        action_publisher.publish_action("left")
+                    elif this_action == 'stop':
+                        action_publisher.publish_action("stop")
+
                     last_action = this_action
 
             cv2.putText(img, f'{this_action.upper()}', org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 20)), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 255, 255), thickness=2)
@@ -118,5 +127,3 @@ while cap.isOpened():
 cap.release()
 cv2.destroyAllWindows()
 rclpy.shutdown()
-
-# down, up, right, left, forward, backward, rotation, stop

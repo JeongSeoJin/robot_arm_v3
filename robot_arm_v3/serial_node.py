@@ -13,7 +13,6 @@ class SerialNode(Node):
             10)
         self.subscription  # prevent unused variable warning
 
-        # 시리얼 포트 설정
         try:
             self.serial_port = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)  # 아두이노 연결된 시리얼 포트 확인
             self.get_logger().info("Serial port opened successfully.")
@@ -36,7 +35,7 @@ class SerialNode(Node):
     def read_serial_data(self):
         if self.serial_port and self.serial_port.is_open:
             try:
-                if self.serial_port.in_waiting > 0:  # 읽을 데이터가 있는지 확인
+                if self.serial_port.in_waiting > 0: 
                     arduino_data = self.serial_port.readline().decode('utf-8').strip()  # 아두이노로부터 데이터 읽기
                     self.get_logger().info(f'Received from Arduino: {arduino_data}')
             except serial.SerialException as e:
